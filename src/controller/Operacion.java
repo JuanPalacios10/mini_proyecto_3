@@ -1,5 +1,5 @@
 package controller;
 
 public enum Operacion {
-    Insertar;
+    Insertar, Actualizar, Buscar, Eliminar, Listar;
 }
