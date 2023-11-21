@@ -31,6 +31,8 @@ public class Controlador {
 
             if(evt.getSource() == vistaGui.menuInsertar) {
                 vistaGui.crearPanelInsertar(this);
+            } else if(evt.getSource() == vistaGui.menuListar) {
+                vistaGui.crearPanelListar(this);
             }
         }
     }
@@ -39,19 +41,24 @@ public class Controlador {
         if(evt != null) {
             JButton botonSeleccionado = (JButton)evt.getSource();
 
-            if(botonSeleccionado.getText().equals("Insertar")) {
-                setOperacion(Operacion.Insertar);
-            }
+            if(botonSeleccionado.getText().equals("Insertar")) setOperacion(Operacion.Insertar);
+            else if(botonSeleccionado.getText().equals("Listar")) setOperacion(Operacion.Listar);
         }
+
+        registroVotos.setResultado("");
 
         switch(operacion) {
             case Insertar: {
                 registroVotos.insertarCandidato(new Candidato(vistaGeneral.getNombre(getOperacion()), vistaGeneral.getCedula(getOperacion()), vistaGeneral.getCiudad(getOperacion()), vistaGeneral.getIdeologia(getOperacion()), vistaGeneral.getPartido(getOperacion()), vistaGeneral.getPromesas(getOperacion())));
                 break;
             }
+            case Listar: {
+                registroVotos.listarCandidatos();
+                break;
+            }
         }
 
-        vistaGeneral.setResultado(registroVotos.getResultado());
+        vistaGeneral.setResultado(registroVotos.getResultado(), getOperacion());
     }
 
     public void iniciarAplicacion() {

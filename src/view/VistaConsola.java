@@ -93,9 +93,19 @@ public class VistaConsola implements VistaGeneral{
     }
 
     @Override
-    public void setResultado(String resultado) {
-        System.out.println("");
-        System.out.println(resultado + "\n");
+    public void setResultado(String resultado, Operacion operacion) {
+        switch(operacion) {
+            case Insertar: {
+                System.out.println("");
+                System.out.println(resultado + "\n");
+                break;
+            }
+            case Listar: {
+                System.out.println("\nListado de Candidatos\n");
+                System.out.println(resultado);
+                break;
+            }
+        }
     }
 
     @Override
@@ -120,12 +130,14 @@ public class VistaConsola implements VistaGeneral{
                     controlador.setOperacion(Operacion.Insertar);
                     try {
                         insertarCandidato();
-                        break;
                     } catch(CrudException e) {
                         System.out.println(e.getMessage());
                         continue;
                     }
+
+                    break;
                 }
+                case 5: controlador.setOperacion(Operacion.Listar); break;
                 case 7: opcion = 7; break;
                 default: System.out.println("\nOpcion no valida\n");
             }

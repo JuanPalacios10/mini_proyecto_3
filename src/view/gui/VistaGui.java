@@ -2,7 +2,6 @@ package view.gui;
 
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
-
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
@@ -20,7 +19,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public javax.swing.JMenuItem menuConteo;
     private javax.swing.JMenuItem menuEliminar;
     public javax.swing.JMenuItem menuInsertar;
-    private javax.swing.JMenuItem menuListar;
+    public javax.swing.JMenuItem menuListar;
     private javax.swing.JMenuBar menuPrincipal;
     private javax.swing.JMenuItem menuResultado;
     private javax.swing.JMenu menuVotos;
@@ -29,6 +28,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     private javax.swing.JPanel panelSeparador;
     private javax.swing.JLabel tituloPrincipal;
     private PanelMenuInsertar panelMenuInsertar;
+    private PanelMenuListar panelMenuListar;
 
     public VistaGui() {
         initComponents();
@@ -207,6 +207,34 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
+    public void crearPanelListar(Controlador controlador) {
+        panelMenuListar = new PanelMenuListar();
+        panelMenuListar.setSize(panelMenus.getSize());
+        panelMenuListar.botonListar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        
+        tituloPrincipal.setText("Listado de Candidatos");
+        panelMenus.removeAll();
+        panelMenus.add(panelMenuListar);
+        panelMenus.revalidate();
+        panelMenus.repaint();
+    }
+
+    public void borrarCampos(Operacion operacion) {
+        switch(operacion) {
+            case Insertar: {
+                panelMenuInsertar.campoNombreInsertar.setText("");
+                panelMenuInsertar.campoCedulaInsertar.setText("");
+                panelMenuInsertar.campoPromesaInsertar.setText("");
+                break;
+            }
+            default: return;
+        }
+    }
+
     @Override
     public String getNombre(Operacion operacion) {
         switch(operacion) {
@@ -279,8 +307,20 @@ public class VistaGui extends JFrame implements VistaGeneral{
     }
 
     @Override
-    public void setResultado(String resultado) {
-        JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+    public void setResultado(String resultado, Operacion operacion) {
+        switch(operacion) {
+            case Insertar: {
+                JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
+            case Listar: {
+                panelMenuListar.campoListar.setText("");
+                panelMenuListar.campoListar.setText(resultado);
+                break;
+            }
+        }
+
+        borrarCampos(operacion);
     }
 
     @Override
@@ -290,6 +330,13 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 controlador.menuActionPerformed(evt);
             }
         });
+
+        menuListar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.menuActionPerformed(evt);
+            }
+        });
+
         ajustesVentana();
     }
 }

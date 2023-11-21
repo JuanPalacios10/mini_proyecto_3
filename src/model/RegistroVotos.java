@@ -38,4 +38,21 @@ public class RegistroVotos {
             resultado = "Debe llenar todos los campos correctamente";
         }
     }
+
+    public void listarCandidatos() {
+        if(candidatos.size() > 0) {
+            for(Candidato candidato : candidatos) {
+                resultado += "Nombre: " + candidato.getNombre() + "\n";
+                resultado += "Cedula: " + candidato.getCedula() + "\n";
+                resultado += "Ciudad: " + candidato.getCiudad().toString().replace("_", " ") + "\n";
+                resultado += "Ideologia: " + candidato.getIdeologia() + "\n";
+                resultado += "Partido: " + candidato.getPartido().toString().replace("_", " ") + "\n";
+                resultado += "Promesas: " + candidato.getPromesas() + "\n";
+
+                if(candidatos.indexOf(candidato) != candidatos.size() - 1) resultado += "\n";
+            }
+        } else {
+            resultado = "Aun no hay ningun candidato\n";
+        }
+    }
 }

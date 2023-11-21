@@ -13,6 +13,6 @@ public interface VistaGeneral {
     public Ideologia getIdeologia(Operacion operacion);
     public Partidos getPartido(Operacion operacion);
     public String getPromesas(Operacion operacion);
-    public void setResultado(String resultado);
+    public void setResultado(String resultado, Operacion operacion);
     public void iniciar(Controlador controlador);
 }
