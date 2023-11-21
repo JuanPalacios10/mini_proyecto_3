@@ -4,6 +4,7 @@ import java.util.Scanner;
 import controller.Controlador;
 import controller.Operacion;
 import model.Ciudades;
+import model.CrudException;
 import model.Ideologia;
 import model.Partidos;
 
@@ -15,37 +16,36 @@ public class VistaConsola implements VistaGeneral{
     private Partidos partido;
 
     @Override
-    public String getNombre() {
+    public String getNombre(Operacion operacion) {
         return nombre;
     }
 
     @Override
-    public String getCedula() {
+    public String getCedula(Operacion operacion) {
         return cedula;
     }
 
     @Override
-    public Ciudades getCiudad() {
+    public Ciudades getCiudad(Operacion operacion) {
         return ciudad;
     }
 
     @Override
-    public Ideologia getIdeologia() {
+    public Ideologia getIdeologia(Operacion operacion) {
         return ideologia;
     }
 
     @Override
-    public Partidos getPartido() {
+    public Partidos getPartido(Operacion operacion) {
         return partido;
     }
 
     @Override
-    public String getPromesas() {
+    public String getPromesas(Operacion operacion) {
         return promesas;
     }
 
-    @Override
-    public void insertarCandidato() {
+    public void insertarCandidato() throws CrudException{
         System.out.println("\nIngrese el nombre del candidato: ");
         nombre = scanner.nextLine();
 
@@ -59,11 +59,21 @@ public class VistaConsola implements VistaGeneral{
 
         System.out.println("\nIngrese la ciudad del candidato: ");
         String ciudadIn = scanner.nextLine();
-        ciudad = Ciudades.valueOf(ciudadIn.replace(" ", "_"));
+
+        try {
+            ciudad = Ciudades.valueOf(ciudadIn.replace(" ", "_"));
+        } catch(IllegalArgumentException e) {
+            throw new CrudException("\nLa ciudad es incorrecta. Intente de nuevo\n");
+        }
 
         System.out.println("\nIngrese la idelogia politica del candidato (Izquierda - Derecha): ");
         String ideologiaIn = scanner.nextLine();
-        ideologia = Ideologia.valueOf(ideologiaIn);
+
+        try {
+            ideologia = Ideologia.valueOf(ideologiaIn);
+        } catch(IllegalArgumentException e) {
+            throw new CrudException("\nLa ideologia es incorrecta. Intente de nuevo\n");
+        }
 
         System.out.println("\nLista de partidos politicos\n");
         for(Partidos partido : Partidos.values()) {
@@ -71,7 +81,12 @@ public class VistaConsola implements VistaGeneral{
         }
         System.out.println("\nIngrese el partido politico del candidato: ");
         String partidoIn = scanner.nextLine();
-        partido = Partidos.valueOf(partidoIn.replace(" ", "_"));
+
+        try {
+            partido = Partidos.valueOf(partidoIn.replace(" ", "_"));
+        } catch(IllegalArgumentException e) {
+            throw new CrudException("\nEl partido es incorrecto. Intente de nuevo\n");
+        }
 
         System.out.println("\nIngrese las promesas del candidato: ");
         promesas = scanner.nextLine();
@@ -79,7 +94,8 @@ public class VistaConsola implements VistaGeneral{
 
     @Override
     public void setResultado(String resultado) {
-        System.out.println(resultado);
+        System.out.println("");
+        System.out.println(resultado + "\n");
     }
 
     @Override
@@ -100,12 +116,21 @@ public class VistaConsola implements VistaGeneral{
             scanner.nextLine(); // Limpiamos el buffer
 
             switch(opcion) {
-                case 1: controlador.setOperacion(Operacion.Insertar); break;
+                case 1: {
+                    controlador.setOperacion(Operacion.Insertar);
+                    try {
+                        insertarCandidato();
+                        break;
+                    } catch(CrudException e) {
+                        System.out.println(e.getMessage());
+                        continue;
+                    }
+                }
                 case 7: opcion = 7; break;
-                default: System.out.println("\nOpcion no valida");
+                default: System.out.println("\nOpcion no valida\n");
             }
 
-            controlador.crudActionPerformed(null);
+            if(opcion < 7) controlador.crudActionPerformed(null); 
         } while(opcion != 7);
     }
 }

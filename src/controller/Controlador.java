@@ -3,7 +3,9 @@ package controller;
 import model.RegistroVotos;
 import model.Candidato;
 import view.VistaGeneral;
+import view.gui.VistaGui;
 import java.awt.event.ActionEvent;
+import javax.swing.JButton;
 
 public class Controlador {
     RegistroVotos registroVotos;
@@ -23,13 +25,28 @@ public class Controlador {
         this.operacion = operacion;
     }
 
+    public void menuActionPerformed(ActionEvent evt) {
+        if(evt != null) {
+            VistaGui vistaGui = (VistaGui)vistaGeneral;
+
+            if(evt.getSource() == vistaGui.menuInsertar) {
+                vistaGui.crearPanelInsertar(this);
+            }
+        }
+    }
+
     public void crudActionPerformed(ActionEvent evt) {
+        if(evt != null) {
+            JButton botonSeleccionado = (JButton)evt.getSource();
+
+            if(botonSeleccionado.getText().equals("Insertar")) {
+                setOperacion(Operacion.Insertar);
+            }
+        }
+
         switch(operacion) {
             case Insertar: {
-                vistaGeneral.insertarCandidato();
-                
-                Candidato candidato = new Candidato(vistaGeneral.getNombre(), vistaGeneral.getCedula(), vistaGeneral.getCiudad(), vistaGeneral.getIdeologia(), vistaGeneral.getPartido(), vistaGeneral.getPromesas());
-                registroVotos.insertarCandidato(candidato);
+                registroVotos.insertarCandidato(new Candidato(vistaGeneral.getNombre(getOperacion()), vistaGeneral.getCedula(getOperacion()), vistaGeneral.getCiudad(getOperacion()), vistaGeneral.getIdeologia(getOperacion()), vistaGeneral.getPartido(getOperacion()), vistaGeneral.getPromesas(getOperacion())));
                 break;
             }
         }
