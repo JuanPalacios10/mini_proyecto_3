@@ -7,17 +7,18 @@ import java.awt.event.ActionListener;
 import javax.swing.plaf.metal.MetalLookAndFeel;
 import controller.Controlador;
 import controller.Operacion;
+import model.Candidato;
 import model.Ciudades;
 import model.Ideologia;
 import model.Partidos;
 import view.VistaGeneral;
 
 public class VistaGui extends JFrame implements VistaGeneral{
-    private javax.swing.JMenuItem menuActualizar;
-    private javax.swing.JMenuItem menuBuscar;
+    public javax.swing.JMenuItem menuActualizar;
+    public javax.swing.JMenuItem menuBuscar;
     public javax.swing.JMenu menuCandidatos;
     public javax.swing.JMenuItem menuConteo;
-    private javax.swing.JMenuItem menuEliminar;
+    public javax.swing.JMenuItem menuEliminar;
     public javax.swing.JMenuItem menuInsertar;
     public javax.swing.JMenuItem menuListar;
     private javax.swing.JMenuBar menuPrincipal;
@@ -28,6 +29,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     private javax.swing.JPanel panelSeparador;
     private javax.swing.JLabel tituloPrincipal;
     private PanelMenuInsertar panelMenuInsertar;
+    private PanelMenuBuscar panelMenuBuscar;
     private PanelMenuListar panelMenuListar;
 
     public VistaGui() {
@@ -207,6 +209,22 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
+    public void crearPanelBuscar(Controlador controlador) {
+        panelMenuBuscar = new PanelMenuBuscar();
+        panelMenuBuscar.setSize(panelMenus.getSize());
+        panelMenuBuscar.botonBusqueda.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        
+        tituloPrincipal.setText("Buscar Candidato");
+        panelMenus.removeAll();
+        panelMenus.add(panelMenuBuscar);
+        panelMenus.revalidate();
+        panelMenus.repaint();
+    }
+
     public void crearPanelListar(Controlador controlador) {
         panelMenuListar = new PanelMenuListar();
         panelMenuListar.setSize(panelMenus.getSize());
@@ -231,6 +249,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 panelMenuInsertar.campoPromesaInsertar.setText("");
                 break;
             }
+            case Buscar: {
+                panelMenuBuscar.campoBusqueda.setText("");
+                break;
+            }
             default: return;
         }
     }
@@ -239,6 +261,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public String getNombre(Operacion operacion) {
         switch(operacion) {
             case Insertar: return panelMenuInsertar.campoNombreInsertar.getText();
+            case Buscar: return panelMenuBuscar.campoBusqueda.getText();
             default: return "";
         }
 
@@ -307,10 +330,31 @@ public class VistaGui extends JFrame implements VistaGeneral{
     }
 
     @Override
+    public void buscarCandidato(Candidato candidato, Operacion operacion) {
+        if(candidato != null) {
+            if(operacion.equals(Operacion.Buscar)) {
+                panelMenuBuscar.panelBuscar.setVisible(true);
+                panelMenuBuscar.nombreInfo.setText("Nombre: " + candidato.getNombre());
+                panelMenuBuscar.cedulaInfo.setText("Cedula: " + candidato.getCedula());
+                panelMenuBuscar.ciudadInfo.setText("Ciudad: " + candidato.getCiudad().toString().replace("_", " "));
+                panelMenuBuscar.ideologiaInfo.setText("Ideologia: " + candidato.getIdeologia());
+                panelMenuBuscar.partidoInfo.setText("Partido: " + candidato.getPartido().toString().replace("_", " "));
+                panelMenuBuscar.campoPromesaInfo.setText(candidato.getPromesas());
+            }
+        }
+    }
+
+    @Override
     public void setResultado(String resultado, Operacion operacion) {
         switch(operacion) {
             case Insertar: {
                 JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
+            case Buscar: {
+                if(!resultado.equals("")) {
+                    JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
                 break;
             }
             case Listar: {
@@ -326,6 +370,12 @@ public class VistaGui extends JFrame implements VistaGeneral{
     @Override
     public void iniciar(Controlador controlador) {
         menuInsertar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.menuActionPerformed(evt);
+            }
+        });
+
+        menuBuscar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 controlador.menuActionPerformed(evt);
             }
