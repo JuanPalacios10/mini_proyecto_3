@@ -337,43 +337,4 @@ public class PanelMenuActualizar extends javax.swing.JPanel {
                 .addContainerGap(39, Short.MAX_VALUE))
         );
     }
-
-    // private void botonBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBusquedaActionPerformed
-    //     if(Crud.estaCandidato(App.candidatos, campoBusqueda.getText())) {
-    //         panelInsertar.setVisible(true);
-    //         Candidato candidatoSeleccionado = Crud.buscarCandidato(App.candidatos, campoBusqueda.getText());
-
-    //         campoNombreInsertar.setText(candidatoSeleccionado.getNombre());
-    //         campoCedulaInsertar.setText(candidatoSeleccionado.getCedula());
-    //         campoCiudadInsertar.setSelectedItem(candidatoSeleccionado.getCiudad().toString().replace("_", " "));
-
-    //         if(candidatoSeleccionado.getIdeologia().equals(Ideologia.Izquierda)) radioIzquierdaInsertar.setSelected(true);
-    //         else if(candidatoSeleccionado.getIdeologia().equals(Ideologia.Derecha)) radioDerechaInsertar.setSelected(true);
-
-    //         campoPartidoInsertar.setSelectedItem(candidatoSeleccionado.getPartido().toString().replace("_", " "));
-    //         campoPromesaInsertar.setText(candidatoSeleccionado.getPromesas());
-    //     } else {
-    //         JOptionPane.showMessageDialog(this.getRootPane(), "El candidato no fue encontrado", "Actualizar Candidato", JOptionPane.WARNING_MESSAGE);
-    //     }
-    // }
-
-    // private void botonActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonActualizarActionPerformed
-    //     Ideologia ideologia = Ideologia.Izquierda;
-    //     Ciudades ciudad = Ciudades.valueOf(campoCiudadInsertar.getSelectedItem().toString().replace(" ", "_"));
-    //     Partidos partido = Partidos.valueOf(campoPartidoInsertar.getSelectedItem().toString().replace(" ", "_"));
-
-    //     if(radioIzquierdaInsertar.isSelected()) ideologia = Ideologia.Izquierda;
-    //     else if(radioDerechaInsertar.isSelected()) ideologia = Ideologia.Derecha;
-
-    //     Candidato candidato = new Candidato(campoNombreInsertar.getText(), campoCedulaInsertar.getText(), ciudad, ideologia, partido, campoPromesaInsertar.getText());
-        
-    //     if(Crud.actualizarCandidato(App.candidatos, campoBusqueda.getText(), candidato)) {
-    //         JOptionPane.showMessageDialog(this.getRootPane(), "El candidato fue actualizado con exito", "Actualizar Candidato", JOptionPane.INFORMATION_MESSAGE);
-    //     } else {
-    //         JOptionPane.showMessageDialog(this.getRootPane(), "Debe llenar todos los campos", "Actualizar Candidato", JOptionPane.WARNING_MESSAGE);
-    //     }
-
-    //     campoBusqueda.setText("");
-    //     panelInsertar.setVisible(false);
-    // }
 }
