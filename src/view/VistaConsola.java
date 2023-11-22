@@ -234,7 +234,7 @@ public class VistaConsola implements VistaGeneral{
                 break;
             }
             case Buscar: {
-                if(!resultado.equals("")) {
+                if(crudException != null) {
                     System.out.println("");
                     System.out.println(resultado + "\n");
                 }
@@ -247,8 +247,9 @@ public class VistaConsola implements VistaGeneral{
                 break;
             }
             case Listar: {
-                System.out.println("\nListado de Candidatos\n");
-                System.out.println(resultado);
+                if(crudException == null) System.out.println("\nListado de Candidatos");
+
+                System.out.println("\n" + resultado);
                 break;
             }
         }
