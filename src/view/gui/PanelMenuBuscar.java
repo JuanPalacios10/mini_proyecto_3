@@ -243,22 +243,4 @@ public class PanelMenuBuscar extends javax.swing.JPanel {
                 .addGap(0, 40, Short.MAX_VALUE))
         );
     }
-
-    // private void botonBusquedaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botonBusquedaActionPerformed
-    //     if(Crud.estaCandidato(App.candidatos, campoBusqueda.getText())) {
-    //         Candidato candidatoSeleccionado = Crud.buscarCandidato(App.candidatos, campoBusqueda.getText());
-    //         panelBuscar.setVisible(true);
-
-    //         nombreInfo.setText("Nombre: " + candidatoSeleccionado.getNombre());
-    //         cedulaInfo.setText("Cedula: " + candidatoSeleccionado.getCedula());
-    //         ciudadInfo.setText("Ciudad: " + candidatoSeleccionado.getCiudad().toString().replace("_", " "));
-    //         ideologiaInfo.setText("Ideologia: " + candidatoSeleccionado.getIdeologia());
-    //         partidoInfo.setText("Partido: " + candidatoSeleccionado.getPartido().toString().replace("_", " "));
-    //         campoPromesaInfo.setText(candidatoSeleccionado.getPromesas());
-    //     } else {
-    //         JOptionPane.showMessageDialog(this.getRootPane(), "El candidato no fue encontrado", "Buscar Candidato", JOptionPane.WARNING_MESSAGE);
-    //     }
-
-    //     campoBusqueda.setText("");
-    // }
 }

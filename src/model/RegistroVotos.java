@@ -63,6 +63,14 @@ public class RegistroVotos {
         return this.candidato;
     }
 
+    public void eliminarCandidato(String busqueda) {
+        if(estaCandidato(busqueda)) {
+            buscarCandidato(busqueda);
+            candidatos.remove(candidato);
+            resultado = "El candidato fue eliminado exitosamente";
+        } else resultado = "El candidato no fue encontrado";
+    }
+
     public void listarCandidatos() {
         if(candidatos.size() > 0) {
             for(Candidato candidato : candidatos) {

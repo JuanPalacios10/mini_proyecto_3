@@ -31,6 +31,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     private PanelMenuInsertar panelMenuInsertar;
     private PanelMenuBuscar panelMenuBuscar;
     private PanelMenuListar panelMenuListar;
+    private PanelMenuEliminar panelMenuEliminar;
 
     public VistaGui() {
         initComponents();
@@ -225,6 +226,22 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
+    public void crearPanelEliminar(Controlador controlador) {
+        panelMenuEliminar = new PanelMenuEliminar();
+        panelMenuEliminar.setSize(panelMenus.getSize());
+        panelMenuEliminar.botonEliminar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        
+        tituloPrincipal.setText("Eliminar Candidato");
+        panelMenus.removeAll();
+        panelMenus.add(panelMenuEliminar);
+        panelMenus.revalidate();
+        panelMenus.repaint();
+    }
+
     public void crearPanelListar(Controlador controlador) {
         panelMenuListar = new PanelMenuListar();
         panelMenuListar.setSize(panelMenus.getSize());
@@ -253,6 +270,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 panelMenuBuscar.campoBusqueda.setText("");
                 break;
             }
+            case Eliminar: {
+                panelMenuEliminar.campoBusqueda.setText("");
+                break;
+            }
             default: return;
         }
     }
@@ -262,6 +283,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
         switch(operacion) {
             case Insertar: return panelMenuInsertar.campoNombreInsertar.getText();
             case Buscar: return panelMenuBuscar.campoBusqueda.getText();
+            case Eliminar: return panelMenuEliminar.campoBusqueda.getText();
             default: return "";
         }
 
@@ -357,6 +379,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 }
                 break;
             }
+            case Eliminar: {
+                JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
             case Listar: {
                 panelMenuListar.campoListar.setText("");
                 panelMenuListar.campoListar.setText(resultado);
@@ -376,6 +402,12 @@ public class VistaGui extends JFrame implements VistaGeneral{
         });
 
         menuBuscar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.menuActionPerformed(evt);
+            }
+        });
+
+        menuEliminar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 controlador.menuActionPerformed(evt);
             }
