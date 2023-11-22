@@ -3,6 +3,7 @@ package view;
 import java.util.Scanner;
 import controller.Controlador;
 import controller.Operacion;
+import model.Candidato;
 import model.Ciudades;
 import model.CrudException;
 import model.Ideologia;
@@ -14,36 +15,6 @@ public class VistaConsola implements VistaGeneral{
     private Ciudades ciudad;
     private Ideologia ideologia;
     private Partidos partido;
-
-    @Override
-    public String getNombre(Operacion operacion) {
-        return nombre;
-    }
-
-    @Override
-    public String getCedula(Operacion operacion) {
-        return cedula;
-    }
-
-    @Override
-    public Ciudades getCiudad(Operacion operacion) {
-        return ciudad;
-    }
-
-    @Override
-    public Ideologia getIdeologia(Operacion operacion) {
-        return ideologia;
-    }
-
-    @Override
-    public Partidos getPartido(Operacion operacion) {
-        return partido;
-    }
-
-    @Override
-    public String getPromesas(Operacion operacion) {
-        return promesas;
-    }
 
     public void insertarCandidato() throws CrudException{
         System.out.println("\nIngrese el nombre del candidato: ");
@@ -93,9 +64,67 @@ public class VistaConsola implements VistaGeneral{
     }
 
     @Override
+    public String getNombre(Operacion operacion) {
+        return nombre;
+    }
+
+    @Override
+    public String getCedula(Operacion operacion) {
+        return cedula;
+    }
+
+    @Override
+    public Ciudades getCiudad(Operacion operacion) {
+        return ciudad;
+    }
+
+    @Override
+    public Ideologia getIdeologia(Operacion operacion) {
+        return ideologia;
+    }
+
+    @Override
+    public Partidos getPartido(Operacion operacion) {
+        return partido;
+    }
+
+    @Override
+    public String getPromesas(Operacion operacion) {
+        return promesas;
+    }
+
+    @Override
+    public void buscarCandidato(Candidato candidato, Operacion operacion) {
+        if(candidato != null) {
+            if(operacion.equals(Operacion.Buscar)) {
+                System.out.println("");
+                System.out.println("Nombre: " + candidato.getNombre());
+                System.out.println("Cedula: " + candidato.getCedula());
+                System.out.println("Ciudad: " + candidato.getCiudad());
+                System.out.println("Ideologia: " + candidato.getIdeologia());
+                System.out.println("Partido: " + candidato.getPartido());
+                System.out.println("Promesas: " + candidato.getPromesas() + "\n");
+            }
+        }
+    }
+
+    @Override
     public void setResultado(String resultado, Operacion operacion) {
         switch(operacion) {
             case Insertar: {
+                System.out.println("");
+                System.out.println(resultado + "\n");
+                break;
+            }
+            case Buscar: {
+                if(!resultado.equals("")) {
+                    System.out.println("");
+                    System.out.println(resultado + "\n");
+                }
+
+                break;
+            }
+            case Eliminar: {
                 System.out.println("");
                 System.out.println(resultado + "\n");
                 break;
@@ -116,8 +145,8 @@ public class VistaConsola implements VistaGeneral{
             System.out.println("MENU");
             System.out.println("1. Insertar candidato");
             System.out.println("2. Actualizar candidato");
-            System.out.println("3. Eliminar candidato");
-            System.out.println("4. Buscar candidato por nombre");
+            System.out.println("3. Buscar candidato por nombre");
+            System.out.println("4. Eliminar candidato");
             System.out.println("5. Listar todos los candidatos");
             System.out.println("6. Continuar con el conteo de votos");
             System.out.println("7. Salir");
@@ -135,6 +164,18 @@ public class VistaConsola implements VistaGeneral{
                         continue;
                     }
 
+                    break;
+                }
+                case 3: {
+                    controlador.setOperacion(Operacion.Buscar);
+                    System.out.println("\nIngrese el nombre del candidato a buscar: ");
+                    nombre = scanner.nextLine();
+                    break;
+                }
+                case 4: {
+                    controlador.setOperacion(Operacion.Eliminar);
+                    System.out.println("\nIngrese el nombre del candidato a eliminar: ");
+                    nombre = scanner.nextLine();
                     break;
                 }
                 case 5: controlador.setOperacion(Operacion.Listar); break;

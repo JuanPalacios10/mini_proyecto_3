@@ -3,8 +3,17 @@ package model;
 import java.util.ArrayList;
 
 public class RegistroVotos {
-    ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
-    String resultado;
+    private ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
+    private Candidato candidato;
+    private String resultado;
+
+    public Candidato getCandidato() {
+        return candidato;
+    }
+
+    public void setCandidato(Candidato candidato) {
+        this.candidato = candidato;
+    }
 
     public String getResultado() {
         return resultado;
@@ -37,6 +46,29 @@ public class RegistroVotos {
         } else {
             resultado = "Debe llenar todos los campos correctamente";
         }
+    }
+
+    public Candidato buscarCandidato(String busqueda) {
+        this.candidato = null;
+
+        for(Candidato candidato : candidatos) {
+            if(candidato.getNombre().equals(busqueda)) {
+                this.candidato = candidato;
+                return this.candidato;
+            }
+        }
+
+        if(this.candidato == null) resultado = "El candidato no fue encontrado";
+
+        return this.candidato;
+    }
+
+    public void eliminarCandidato(String busqueda) {
+        if(estaCandidato(busqueda)) {
+            buscarCandidato(busqueda);
+            candidatos.remove(candidato);
+            resultado = "El candidato fue eliminado exitosamente";
+        } else resultado = "El candidato no fue encontrado";
     }
 
     public void listarCandidatos() {
