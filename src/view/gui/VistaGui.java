@@ -29,9 +29,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
     private javax.swing.JPanel panelSeparador;
     private javax.swing.JLabel tituloPrincipal;
     private PanelMenuInsertar panelMenuInsertar;
+    private PanelMenuActualizar panelMenuActualizar;
     private PanelMenuBuscar panelMenuBuscar;
-    private PanelMenuListar panelMenuListar;
     private PanelMenuEliminar panelMenuEliminar;
+    private PanelMenuListar panelMenuListar;
 
     public VistaGui() {
         initComponents();
@@ -194,7 +195,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
         setVisible(true);
     }
 
-    public void crearPanelInsertar(Controlador controlador) {
+    public void crearPanelMenuInsertar(Controlador controlador) {
         panelMenuInsertar = new PanelMenuInsertar();
         panelMenuInsertar.setSize(panelMenus.getSize());
         panelMenuInsertar.botonInsertar.addActionListener(new ActionListener() {
@@ -210,7 +211,28 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
-    public void crearPanelBuscar(Controlador controlador) {
+    public void crearPanelMenuActualizar(Controlador controlador) {
+        panelMenuActualizar = new PanelMenuActualizar();
+        panelMenuActualizar.setSize(panelMenus.getSize());
+        panelMenuActualizar.botonBusqueda.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        panelMenuActualizar.botonActualizar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        
+        tituloPrincipal.setText("Actualizar Candidato");
+        panelMenus.removeAll();
+        panelMenus.add(panelMenuActualizar);
+        panelMenus.revalidate();
+        panelMenus.repaint();
+    }
+
+    public void crearPanelMenuBuscar(Controlador controlador) {
         panelMenuBuscar = new PanelMenuBuscar();
         panelMenuBuscar.setSize(panelMenus.getSize());
         panelMenuBuscar.botonBusqueda.addActionListener(new ActionListener() {
@@ -226,7 +248,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
-    public void crearPanelEliminar(Controlador controlador) {
+    public void crearPanelMenuEliminar(Controlador controlador) {
         panelMenuEliminar = new PanelMenuEliminar();
         panelMenuEliminar.setSize(panelMenus.getSize());
         panelMenuEliminar.botonEliminar.addActionListener(new ActionListener() {
@@ -242,7 +264,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
-    public void crearPanelListar(Controlador controlador) {
+    public void crearPanelMenuListar(Controlador controlador) {
         panelMenuListar = new PanelMenuListar();
         panelMenuListar.setSize(panelMenus.getSize());
         panelMenuListar.botonListar.addActionListener(new java.awt.event.ActionListener() {
@@ -266,8 +288,14 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 panelMenuInsertar.campoPromesaInsertar.setText("");
                 break;
             }
+            case Actualizar: {
+                panelMenuActualizar.campoBusqueda.setText("");
+                panelMenuActualizar.panelInsertar.setVisible(false);
+                break;
+            }
             case Buscar: {
-                panelMenuBuscar.campoBusqueda.setText("");
+                if(panelMenus.isAncestorOf(panelMenuBuscar)) panelMenuBuscar.campoBusqueda.setText("");
+                if(panelMenus.isAncestorOf(panelMenuActualizar) && !panelMenuActualizar.panelInsertar.isVisible()) panelMenuActualizar.campoBusqueda.setText("");
                 break;
             }
             case Eliminar: {
@@ -282,7 +310,11 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public String getNombre(Operacion operacion) {
         switch(operacion) {
             case Insertar: return panelMenuInsertar.campoNombreInsertar.getText();
-            case Buscar: return panelMenuBuscar.campoBusqueda.getText();
+            case Actualizar: return panelMenuActualizar.campoNombreInsertar.getText();
+            case Buscar: {
+                if(panelMenus.isAncestorOf(panelMenuBuscar)) return panelMenuBuscar.campoBusqueda.getText();
+                else if(panelMenus.isAncestorOf(panelMenuActualizar)) return panelMenuActualizar.campoBusqueda.getText();
+            }
             case Eliminar: return panelMenuEliminar.campoBusqueda.getText();
             default: return "";
         }
@@ -293,6 +325,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public String getCedula(Operacion operacion) {
         switch(operacion) {
             case Insertar: return panelMenuInsertar.campoCedulaInsertar.getText();
+            case Actualizar: return panelMenuActualizar.campoCedulaInsertar.getText();
             default: return "";
         }
     }
@@ -304,6 +337,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
         switch(operacion) {
             case Insertar: {
                 ciudad = Ciudades.valueOf(panelMenuInsertar.campoCiudadInsertar.getSelectedItem().toString().replace(" ", "_"));
+                break;
+            }
+            case Actualizar: {
+                ciudad = Ciudades.valueOf(panelMenuActualizar.campoCiudadInsertar.getSelectedItem().toString().replace(" ", "_"));
                 break;
             }
             default: ciudad = null;
@@ -322,6 +359,11 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 else if(panelMenuInsertar.radioDerechaInsertar.isSelected()) ideologia = Ideologia.Derecha;
                 break;
             }
+            case Actualizar: {
+                if(panelMenuActualizar.radioIzquierdaInsertar.isSelected()) ideologia = Ideologia.Izquierda;
+                else if(panelMenuActualizar.radioDerechaInsertar.isSelected()) ideologia = Ideologia.Derecha;
+                break;
+            }
             default: ideologia = null;
         }
 
@@ -337,6 +379,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 partido = Partidos.valueOf(panelMenuInsertar.campoPartidoInsertar.getSelectedItem().toString().replace(" ", "_"));
                 break;
             }
+            case Actualizar: {
+                partido = Partidos.valueOf(panelMenuActualizar.campoPartidoInsertar.getSelectedItem().toString().replace(" ", "_"));
+                break;
+            }
             default: partido = null;
         }
 
@@ -347,6 +393,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public String getPromesas(Operacion operacion) {
         switch(operacion) {
             case Insertar: return panelMenuInsertar.campoPromesaInsertar.getText();
+            case Actualizar: return panelMenuActualizar.campoPromesaInsertar.getText();
             default: return "";
         }
     }
@@ -355,13 +402,24 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public void buscarCandidato(Candidato candidato, Operacion operacion) {
         if(candidato != null) {
             if(operacion.equals(Operacion.Buscar)) {
-                panelMenuBuscar.panelBuscar.setVisible(true);
-                panelMenuBuscar.nombreInfo.setText("Nombre: " + candidato.getNombre());
-                panelMenuBuscar.cedulaInfo.setText("Cedula: " + candidato.getCedula());
-                panelMenuBuscar.ciudadInfo.setText("Ciudad: " + candidato.getCiudad().toString().replace("_", " "));
-                panelMenuBuscar.ideologiaInfo.setText("Ideologia: " + candidato.getIdeologia());
-                panelMenuBuscar.partidoInfo.setText("Partido: " + candidato.getPartido().toString().replace("_", " "));
-                panelMenuBuscar.campoPromesaInfo.setText(candidato.getPromesas());
+                if(panelMenus.isAncestorOf(panelMenuBuscar)) {
+                    panelMenuBuscar.panelBuscar.setVisible(true);
+                    panelMenuBuscar.nombreInfo.setText("Nombre: " + candidato.getNombre());
+                    panelMenuBuscar.cedulaInfo.setText("Cedula: " + candidato.getCedula());
+                    panelMenuBuscar.ciudadInfo.setText("Ciudad: " + candidato.getCiudad().toString().replace("_", " "));
+                    panelMenuBuscar.ideologiaInfo.setText("Ideologia: " + candidato.getIdeologia());
+                    panelMenuBuscar.partidoInfo.setText("Partido: " + candidato.getPartido().toString().replace("_", " "));
+                    panelMenuBuscar.campoPromesaInfo.setText(candidato.getPromesas());
+                } else if(panelMenus.isAncestorOf(panelMenuActualizar)) {
+                    panelMenuActualizar.panelInsertar.setVisible(true);
+                    panelMenuActualizar.campoNombreInsertar.setText(candidato.getNombre());
+                    panelMenuActualizar.campoCedulaInsertar.setText(candidato.getCedula());
+                    panelMenuActualizar.campoCiudadInsertar.setSelectedItem(candidato.getCiudad().toString().replace("_", " "));
+                    if(candidato.getIdeologia().equals(Ideologia.Izquierda)) panelMenuActualizar.radioIzquierdaInsertar.setSelected(true);
+                    else if(candidato.getIdeologia().equals(Ideologia.Derecha)) panelMenuActualizar.radioDerechaInsertar.setSelected(true);
+                    panelMenuActualizar.campoPartidoInsertar.setSelectedItem(candidato.getPartido().toString().replace("_", " "));
+                    panelMenuActualizar.campoPromesaInsertar.setText(candidato.getPromesas());
+                }
             }
         }
     }
@@ -370,6 +428,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public void setResultado(String resultado, Operacion operacion) {
         switch(operacion) {
             case Insertar: {
+                JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                break;
+            }
+            case Actualizar: {
                 JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
@@ -396,6 +458,12 @@ public class VistaGui extends JFrame implements VistaGeneral{
     @Override
     public void iniciar(Controlador controlador) {
         menuInsertar.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt) {
+                controlador.menuActionPerformed(evt);
+            }
+        });
+
+        menuActualizar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 controlador.menuActionPerformed(evt);
             }

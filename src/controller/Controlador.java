@@ -29,10 +29,11 @@ public class Controlador {
         if(evt != null) {
             VistaGui vistaGui = (VistaGui)vistaGeneral;
 
-            if(evt.getSource() == vistaGui.menuInsertar) vistaGui.crearPanelInsertar(this);
-            else if(evt.getSource() == vistaGui.menuBuscar) vistaGui.crearPanelBuscar(this);
-            else if(evt.getSource() == vistaGui.menuEliminar) vistaGui.crearPanelEliminar(this);
-            else if(evt.getSource() == vistaGui.menuListar) vistaGui.crearPanelListar(this);
+            if(evt.getSource() == vistaGui.menuInsertar) vistaGui.crearPanelMenuInsertar(this);
+            else if(evt.getSource() == vistaGui.menuActualizar) vistaGui.crearPanelMenuActualizar(this);
+            else if(evt.getSource() == vistaGui.menuBuscar) vistaGui.crearPanelMenuBuscar(this);
+            else if(evt.getSource() == vistaGui.menuEliminar) vistaGui.crearPanelMenuEliminar(this);
+            else if(evt.getSource() == vistaGui.menuListar) vistaGui.crearPanelMenuListar(this);
         }
     }
 
@@ -41,6 +42,7 @@ public class Controlador {
             JButton botonSeleccionado = (JButton)evt.getSource();
 
             if(botonSeleccionado.getText().equals("Insertar")) setOperacion(Operacion.Insertar);
+            else if(botonSeleccionado.getText().equals("Actualizar")) setOperacion(Operacion.Actualizar);
             else if(botonSeleccionado.getText().equals("Buscar")) setOperacion(Operacion.Buscar);
             else if(botonSeleccionado.getText().equals("Eliminar")) setOperacion(Operacion.Eliminar);
             else if(botonSeleccionado.getText().equals("Listar")) setOperacion(Operacion.Listar);
@@ -51,6 +53,10 @@ public class Controlador {
         switch(operacion) {
             case Insertar: {
                 registroVotos.insertarCandidato(new Candidato(vistaGeneral.getNombre(getOperacion()), vistaGeneral.getCedula(getOperacion()), vistaGeneral.getCiudad(getOperacion()), vistaGeneral.getIdeologia(getOperacion()), vistaGeneral.getPartido(getOperacion()), vistaGeneral.getPromesas(getOperacion())));
+                break;
+            }
+            case Actualizar: {
+                registroVotos.actualizarCandidato(new Candidato(vistaGeneral.getNombre(getOperacion()), vistaGeneral.getCedula(getOperacion()), vistaGeneral.getCiudad(getOperacion()), vistaGeneral.getIdeologia(getOperacion()), vistaGeneral.getPartido(getOperacion()), vistaGeneral.getPromesas(getOperacion())), vistaGeneral.getNombre(Operacion.Buscar));
                 break;
             }
             case Buscar: {
