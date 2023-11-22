@@ -3,9 +3,22 @@ package model;
 import java.util.ArrayList;
 
 public class RegistroVotos {
-    private ArrayList<Candidato> candidatos = new ArrayList<Candidato>();
+    private ArrayList<Candidato> candidatos;
+    private CrudException crudException;
     private Candidato candidato;
     private String resultado;
+
+    public RegistroVotos() {
+        this.candidatos = new ArrayList<Candidato>();
+    }
+
+    public CrudException getCrudException() {
+        return crudException;
+    }
+
+    public void setCrudException(CrudException crudException) {
+        this.crudException = crudException;
+    }
 
     public Candidato getCandidato() {
         return candidato;
@@ -45,6 +58,7 @@ public class RegistroVotos {
             }
         } else {
             resultado = "Debe llenar todos los campos correctamente";
+            crudException = new CrudException(resultado);
         }
     }
 
@@ -55,6 +69,7 @@ public class RegistroVotos {
             resultado = "El candidato fue actualizado correctamente";
         } else {
             resultado = "Debe llenar todos los campos correctamente";
+            crudException = new CrudException(resultado);
         }
     }
 
@@ -68,7 +83,10 @@ public class RegistroVotos {
             }
         }
 
-        if(this.candidato == null) resultado = "El candidato no fue encontrado";
+        if(this.candidato == null) {
+            resultado = "El candidato no fue encontrado";
+            crudException = new CrudException(resultado);
+        }
 
         return this.candidato;
     }
@@ -78,7 +96,10 @@ public class RegistroVotos {
             buscarCandidato(busqueda);
             candidatos.remove(candidato);
             resultado = "El candidato fue eliminado exitosamente";
-        } else resultado = "El candidato no fue encontrado";
+        } else {
+            resultado = "El candidato no fue encontrado";
+            crudException = new CrudException(resultado);
+        }
     }
 
     public void listarCandidatos() {
@@ -95,6 +116,7 @@ public class RegistroVotos {
             }
         } else {
             resultado = "Aun no hay ningun candidato\n";
+            crudException = new CrudException(resultado);
         }
     }
 }

@@ -221,7 +221,7 @@ public class VistaConsola implements VistaGeneral{
     }
 
     @Override
-    public void setResultado(String resultado, Operacion operacion) {
+    public void setResultado(String resultado, Operacion operacion, CrudException crudException) {
         switch(operacion) {
             case Insertar: {
                 System.out.println("");

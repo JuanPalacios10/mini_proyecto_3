@@ -48,6 +48,7 @@ public class Controlador {
             else if(botonSeleccionado.getText().equals("Listar")) setOperacion(Operacion.Listar);
         }
 
+        registroVotos.setCrudException(null);
         registroVotos.setResultado("");
 
         switch(operacion) {
@@ -73,7 +74,7 @@ public class Controlador {
             }
         }
 
-        vistaGeneral.setResultado(registroVotos.getResultado(), getOperacion());
+        vistaGeneral.setResultado(registroVotos.getResultado(), getOperacion(), registroVotos.getCrudException());
     }
 
     public void iniciarAplicacion() {
