@@ -48,6 +48,16 @@ public class RegistroVotos {
         }
     }
 
+    public void actualizarCandidato(Candidato candidato, String busqueda) {
+        if(!candidato.getNombre().equals("") && !candidato.getCedula().equals("") && candidato.getIdeologia() != null && !candidato.getPromesas().equals("")) {
+            buscarCandidato(busqueda);
+            candidatos.set(candidatos.indexOf(this.candidato), candidato);
+            resultado = "El candidato fue actualizado correctamente";
+        } else {
+            resultado = "Debe llenar todos los campos correctamente";
+        }
+    }
+
     public Candidato buscarCandidato(String busqueda) {
         this.candidato = null;
 
