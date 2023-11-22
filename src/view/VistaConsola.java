@@ -124,6 +124,11 @@ public class VistaConsola implements VistaGeneral{
 
                 break;
             }
+            case Eliminar: {
+                System.out.println("");
+                System.out.println(resultado + "\n");
+                break;
+            }
             case Listar: {
                 System.out.println("\nListado de Candidatos\n");
                 System.out.println(resultado);
@@ -164,6 +169,12 @@ public class VistaConsola implements VistaGeneral{
                 case 3: {
                     controlador.setOperacion(Operacion.Buscar);
                     System.out.println("\nIngrese el nombre del candidato a buscar: ");
+                    nombre = scanner.nextLine();
+                    break;
+                }
+                case 4: {
+                    controlador.setOperacion(Operacion.Eliminar);
+                    System.out.println("\nIngrese el nombre del candidato a eliminar: ");
                     nombre = scanner.nextLine();
                     break;
                 }
