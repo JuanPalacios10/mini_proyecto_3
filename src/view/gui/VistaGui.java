@@ -9,6 +9,7 @@ import controller.Controlador;
 import controller.Operacion;
 import model.Candidato;
 import model.Ciudades;
+import model.CrudException;
 import model.Ideologia;
 import model.Partidos;
 import view.VistaGeneral;
@@ -288,11 +289,6 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 panelMenuInsertar.campoPromesaInsertar.setText("");
                 break;
             }
-            case Actualizar: {
-                panelMenuActualizar.campoBusqueda.setText("");
-                panelMenuActualizar.panelInsertar.setVisible(false);
-                break;
-            }
             case Buscar: {
                 if(panelMenus.isAncestorOf(panelMenuBuscar)) panelMenuBuscar.campoBusqueda.setText("");
                 if(panelMenus.isAncestorOf(panelMenuActualizar) && !panelMenuActualizar.panelInsertar.isVisible()) panelMenuActualizar.campoBusqueda.setText("");
@@ -425,29 +421,37 @@ public class VistaGui extends JFrame implements VistaGeneral{
     }
 
     @Override
-    public void setResultado(String resultado, Operacion operacion) {
+    public void setResultado(String resultado, Operacion operacion, CrudException crudException) {
         switch(operacion) {
             case Insertar: {
-                JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                if(crudException == null) JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                else JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Advertencia", JOptionPane.WARNING_MESSAGE);
                 break;
             }
             case Actualizar: {
-                JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                if(crudException == null) {
+                    JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                    panelMenuActualizar.campoBusqueda.setText("");
+                    panelMenuActualizar.panelInsertar.setVisible(false);
+                } else JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Advertencia", JOptionPane.WARNING_MESSAGE);
                 break;
             }
             case Buscar: {
-                if(!resultado.equals("")) {
-                    JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
-                }
+                if(crudException != null) JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
                 break;
             }
             case Eliminar: {
-                JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                if(crudException == null) JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                else JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Advertencia", JOptionPane.WARNING_MESSAGE);
                 break;
             }
             case Listar: {
-                panelMenuListar.campoListar.setText("");
-                panelMenuListar.campoListar.setText(resultado);
+                if(crudException == null) {
+                    panelMenuListar.campoListar.setText("");
+                    panelMenuListar.campoListar.setText(resultado);
+                } else {
+                    JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                }
                 break;
             }
         }
