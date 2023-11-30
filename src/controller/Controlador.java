@@ -34,18 +34,22 @@ public class Controlador {
             else if(evt.getSource() == vistaGui.menuBuscar) vistaGui.crearPanelMenuBuscar(this);
             else if(evt.getSource() == vistaGui.menuEliminar) vistaGui.crearPanelMenuEliminar(this);
             else if(evt.getSource() == vistaGui.menuListar) vistaGui.crearPanelMenuListar(this);
+            else if(evt.getSource() == vistaGui.menuConteo) vistaGui.crearPanelConteo(this,registroVotos.getVotante());
+            else if(evt.getSource() == vistaGui.menuResultado) vistaGui.crearPanelresultados(this);
         }
     }
 
     public void crudActionPerformed(ActionEvent evt) {
         if(evt != null) {
             JButton botonSeleccionado = (JButton)evt.getSource();
-
             if(botonSeleccionado.getText().equals("Insertar")) setOperacion(Operacion.Insertar);
             else if(botonSeleccionado.getText().equals("Actualizar")) setOperacion(Operacion.Actualizar);
             else if(botonSeleccionado.getText().equals("Buscar")) setOperacion(Operacion.Buscar);
             else if(botonSeleccionado.getText().equals("Eliminar")) setOperacion(Operacion.Eliminar);
             else if(botonSeleccionado.getText().equals("Listar")) setOperacion(Operacion.Listar);
+            else if(botonSeleccionado.getText().equals("Votar"))setOperacion(Operacion.Votar);
+            else if(botonSeleccionado.getText().equals("Conocer Ganador"))setOperacion(Operacion.Resultados);
+
         }
 
         registroVotos.setCrudException(null);
@@ -70,6 +74,15 @@ public class Controlador {
             }
             case Listar: {
                 registroVotos.listarCandidatos();
+                break;
+            }
+            case Votar:{
+                registroVotos.addVotos(vistaGeneral.getVotos());
+                break;
+
+            }
+            case Resultados:{
+                vistaGeneral.setDatos(registroVotos.encontrarGanador(),registroVotos.encontrarTopCiudades());
                 break;
             }
         }

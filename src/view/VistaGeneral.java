@@ -17,5 +17,8 @@ public interface VistaGeneral {
     public String getPromesas(Operacion operacion);
     public void buscarCandidato(Candidato candidato, Operacion operacion);
     public void setResultado(String resultado, Operacion operacion, CrudException crudException);
+    public String getVotos();
     public void iniciar(Controlador controlador);
+    public int getIndex();
+    public void setDatos(Candidato candidato, String topCiudades);
 }

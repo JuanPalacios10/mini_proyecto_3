@@ -23,7 +23,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
     public javax.swing.JMenuItem menuInsertar;
     public javax.swing.JMenuItem menuListar;
     private javax.swing.JMenuBar menuPrincipal;
-    private javax.swing.JMenuItem menuResultado;
+    public javax.swing.JMenuItem menuResultado;
     private javax.swing.JMenu menuVotos;
     private javax.swing.JPanel panelMenus;
     private javax.swing.JPanel panelPrincipal;
@@ -34,7 +34,9 @@ public class VistaGui extends JFrame implements VistaGeneral{
     private PanelMenuBuscar panelMenuBuscar;
     private PanelMenuEliminar panelMenuEliminar;
     private PanelMenuListar panelMenuListar;
-
+    public PanelMenuConteo panelMenuConteo;
+    private PanelMenuResultado panelMenuResultado;
+    public static int index = 0;
     public VistaGui() {
         initComponents();
     }
@@ -281,6 +283,37 @@ public class VistaGui extends JFrame implements VistaGeneral{
         panelMenus.repaint();
     }
 
+    public void crearPanelConteo(Controlador controlador, String nombre){
+        panelMenuConteo = new PanelMenuConteo();
+        panelMenuConteo.setSize(panelMenus.getSize());
+        panelMenuConteo.nombreVotos.setText("Digita los votos de" + nombre);
+        panelMenuConteo.botonVotar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        tituloPrincipal.setText("Votacion:");
+        panelMenus.removeAll();
+        panelMenus.add(panelMenuConteo);
+        panelMenus.revalidate();
+        panelMenus.repaint();
+    }
+
+    public void crearPanelresultados(Controlador controlador){
+        panelMenuResultado = new PanelMenuResultado();
+        panelMenuResultado.setSize(panelMenus.getSize());
+        panelMenuResultado.botonGanador.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt){
+                controlador.crudActionPerformed(evt);
+            }
+        });
+        tituloPrincipal.setText("Resultados:");
+        panelMenus.removeAll();
+        panelMenus.add(panelMenuResultado);
+        panelMenus.revalidate();
+        panelMenus.repaint();
+    }
+
     public void borrarCampos(Operacion operacion) {
         switch(operacion) {
             case Insertar: {
@@ -298,9 +331,14 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 panelMenuEliminar.campoBusqueda.setText("");
                 break;
             }
+            case Votar: {
+                panelMenuConteo.numVotos.setText("");
+            }
             default: return;
         }
     }
+
+    
 
     @Override
     public String getNombre(Operacion operacion) {
@@ -384,6 +422,10 @@ public class VistaGui extends JFrame implements VistaGeneral{
 
         return partido;
     }
+    @Override
+    public int getIndex(){
+        return index;
+    }
 
     @Override
     public String getPromesas(Operacion operacion) {
@@ -454,6 +496,22 @@ public class VistaGui extends JFrame implements VistaGeneral{
                 }
                 break;
             }
+            case Votar: {
+                panelMenuConteo.numVotos.setVisible(true);
+                if(crudException == null){
+                     panelMenuConteo.nombreVotos.setText("Digital los votos de:" +  resultado);
+                panelMenuConteo.numVotos.setText("");
+                }
+                //if(crudException == null) JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Información", JOptionPane.INFORMATION_MESSAGE);
+                if(crudException != null) {
+                    JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Advertencia", JOptionPane.WARNING_MESSAGE);
+}
+                break;
+            }
+            case Resultados:
+                if(crudException != null) JOptionPane.showMessageDialog(this.getContentPane(), resultado, "Advertencia", JOptionPane.WARNING_MESSAGE);
+                break;
+
         }
 
         borrarCampos(operacion);
@@ -461,6 +519,7 @@ public class VistaGui extends JFrame implements VistaGeneral{
 
     @Override
     public void iniciar(Controlador controlador) {
+
         menuInsertar.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent evt) {
                 controlador.menuActionPerformed(evt);
@@ -491,6 +550,41 @@ public class VistaGui extends JFrame implements VistaGeneral{
             }
         });
 
+        menuConteo.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent evt){
+                controlador.menuActionPerformed(evt);
+                
+            }
+        });
+
+        menuResultado.addActionListener(new ActionListener() {
+            public void actionPerformed(ActionEvent evt){
+                controlador.menuActionPerformed(evt);
+            }
+        });
+
         ajustesVentana();
     }
+
+    @Override
+    public String getVotos() {
+        return panelMenuConteo.numVotos.getText();
+    }
+
+
+
+    @Override
+    public void setDatos(Candidato candidato, String topCiudades) {
+        
+        if (candidato != null) {
+            panelMenuResultado.nombreGanador.setText("Nombre: " + candidato.getNombre());
+            panelMenuResultado.cedulaGanador.setText("CC:" + candidato.getCedula());
+            panelMenuResultado.campoPromesas.setText(candidato.getPromesas().toString());
+            panelMenuResultado.campoTop3.setText(topCiudades);
+            panelMenuResultado.campoTop3.setEditable(false);
+        }
+    }
+
+
+
 }

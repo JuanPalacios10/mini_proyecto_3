@@ -1,23 +1,21 @@
 package view.gui;
 
-import java.util.Map;
-import javax.swing.JOptionPane;
 
 public class PanelMenuResultado extends javax.swing.JPanel {
-    private javax.swing.JTextArea CampoPartido;
-    private javax.swing.JTextArea campoPromesas;
-    private static javax.swing.JTextArea campoTop3;
-    private java.awt.Label cedulaGanador;
-    private java.awt.Label nombreGanador;
+    public javax.swing.JTextArea CampoPartido;
+    public javax.swing.JTextArea campoPromesas;
+    public javax.swing.JTextArea campoTop3;
+    public java.awt.Label cedulaGanador;
+    public java.awt.Label nombreGanador;
     private javax.swing.JPanel panelResultado;
     private javax.swing.JScrollPane scrollCampoPartido;
     private javax.swing.JScrollPane scrollCampoPromesas;
     private javax.swing.JScrollPane scrollCampoTop3;
-    private java.awt.Label tituloGanador;
-    private java.awt.Label tituloPartido;
-    private java.awt.Label tituloPromesas;
-    private java.awt.Label tituloTop3;
-    private javax.swing.JButton botonGanador;
+    public java.awt.Label tituloGanador;
+    public java.awt.Label tituloPartido;
+    public java.awt.Label tituloPromesas;
+    public java.awt.Label tituloTop3;
+    public javax.swing.JButton botonGanador;
 
     public PanelMenuResultado() {
         initComponents();
@@ -44,17 +42,17 @@ public class PanelMenuResultado extends javax.swing.JPanel {
 
         campoPromesas.setColumns(20);
         campoPromesas.setRows(5);
-        campoPromesas.setEditable(false);
+        campoPromesas.setEditable(true);
         scrollCampoPromesas.setViewportView(campoPromesas);
 
         tituloPromesas.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         tituloPromesas.setText("Promesas:");
 
         nombreGanador.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        nombreGanador.setText("Nombre:");
+        nombreGanador.setText("");
 
         cedulaGanador.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        cedulaGanador.setText("Cédula:");
+        cedulaGanador.setText("");
 
         tituloTop3.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         tituloTop3.setText("TOP 3 CIUDADES CON MENOS CANDIDATOS");
@@ -73,12 +71,6 @@ public class PanelMenuResultado extends javax.swing.JPanel {
         scrollCampoPartido.setViewportView(CampoPartido);
 
         botonGanador.setText("Conocer Ganador");
-        botonGanador.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                botonGanadorActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout panelResultadoLayout = new javax.swing.GroupLayout(panelResultado);
         panelResultado.setLayout(panelResultadoLayout);
         panelResultadoLayout.setHorizontalGroup(
@@ -141,34 +133,4 @@ public class PanelMenuResultado extends javax.swing.JPanel {
         );              
     }
 
-    private void botonGanadorActionPerformed(java.awt.event.ActionEvent evt) {                                             
-        Candidato ganador = obtenerGanador();
-        if (ganador != null) {
-            nombreGanador.setText("Nombre: " + ganador.getNombre());
-            cedulaGanador.setText("Cédula: " + ganador.getCedula());
-            campoPromesas.setText(ganador.getPromesas());
-            campoTop3.setText(Crud.encontrarTopCiudades(App.candidatos));
-            CampoPartido.setText("El partido con más candidatos es " + Crud.encontrarPartido(App.candidatos));
-            App.menuCandidatos.setVisible(false);
-            App.menuConteo.setVisible(false);
-        } else {
-            JOptionPane.showMessageDialog(this.getRootPane(), "Aún no hay votos registrados.");
-        }
-    }        
-
-    public Candidato obtenerGanador() {
-        if (!App.votosCandidatos.isEmpty()) {
-            Map.Entry<Candidato, Integer> maxEntry = null;
-    
-            for (Map.Entry<Candidato, Integer> entry : App.votosCandidatos.entrySet()) {
-                if (maxEntry == null || entry.getValue().compareTo(maxEntry.getValue()) > 0) {
-                    maxEntry = entry;
-                }
-            }
-    
-            return maxEntry.getKey();
-        }
-    
-        return null;
-    }
 }
