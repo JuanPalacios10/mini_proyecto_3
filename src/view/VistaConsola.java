@@ -11,11 +11,12 @@ import model.Partidos;
 
 public class VistaConsola implements VistaGeneral{
     private Scanner scanner = new Scanner(System.in);
-    private String nombre, cedula, promesas, busqueda;
+    private String nombre, cedula, promesas, busqueda, votos;
     private Ciudades ciudad;
     private Ideologia ideologia;
     private Partidos partido;
     private int opcion;
+    private boolean contados = false;
 
     public void insertarCandidato() throws CrudException{
         System.out.println("\nIngrese el nombre del candidato: ");
@@ -157,6 +158,11 @@ public class VistaConsola implements VistaGeneral{
         }
     }
 
+    private void conteoVotos(String nombre) {
+        System.out.println("\nIngrese el numero de votos del candidato " + nombre + ": ");
+        votos = scanner.nextLine();
+    }
+
     @Override
     public String getNombre(Operacion operacion) {
         if(operacion.equals(Operacion.Buscar)) return busqueda;
@@ -187,6 +193,44 @@ public class VistaConsola implements VistaGeneral{
     @Override
     public String getPromesas(Operacion operacion) {
         return promesas;
+    }
+
+    @Override
+    public String getVotos(String nombre) {
+        if(!nombre.equals("")) {
+            conteoVotos(nombre);
+        }
+        return votos;
+    }
+
+    @Override
+    public void setDatos(Candidato candidato, String topCiudades, String topPartido) {
+        if(candidato != null) {
+            int opc;
+
+            do {
+                System.out.println("MENU 2");
+                System.out.println("1. Conocer el candidato ganador ");
+                System.out.println("2. Conocer el partido con más candidatos inscritos");
+                System.out.println("3. Top 3 de las ciudades con menos candidatos");
+                System.out.println("4. Salir.");
+                System.out.println("Seleccione una opcion: ");
+                opc = scanner.nextInt();
+
+                switch(opc){
+                    case 1: {
+                        System.out.println("\nNombre: " + candidato.getNombre());
+                        System.out.println("Cedula: " + candidato.getCedula());
+                        System.out.println("Promesas: " + candidato.getPromesas() + "\n");
+                        break;
+                    }
+                    case 2: System.out.println("\nEl partido con mas candidatos inscritos es " + topPartido + "\n"); break;
+                    case 3: System.out.println("\nTop 3 de las ciudades con menos candidatos como ciudad de origen\n\n" + topCiudades + "\n"); break;
+                    case 4: this.opcion = 7; break;
+                    default: System.out.println("\nIngrese una opcion valida\n");
+                }
+            } while(opc != 4);
+        }
     }
 
     @Override
@@ -252,6 +296,15 @@ public class VistaConsola implements VistaGeneral{
                 System.out.println("\n" + resultado);
                 break;
             }
+            case Votar: {
+                if(crudException != null) {
+                    System.out.println("\n" + resultado + "\n");
+                    contados = true;
+                }
+
+                break;
+            }
+            case Resultados: break;
         }
     }
 
@@ -269,6 +322,7 @@ public class VistaConsola implements VistaGeneral{
             System.out.print("Seleccione una opción: ");
             opcion = scanner.nextInt();
             scanner.nextLine(); // Limpiar el buffer
+            contados = false;
 
             switch(opcion) {
                 case 1: {
@@ -303,11 +357,26 @@ public class VistaConsola implements VistaGeneral{
                     break;
                 }
                 case 5: controlador.setOperacion(Operacion.Listar); break;
+                case 6: {
+                    int contador = 0;
+                    controlador.setOperacion(Operacion.Votar);
+                    
+                    while(contados == false) {
+                        controlador.crudActionPerformed(null);
+                        contador++;
+                    }
+
+                    if(contador > 0) {
+                        controlador.setOperacion(Operacion.Resultados);
+                        controlador.crudActionPerformed(null);
+                    }
+                    break;
+                }
                 case 7: opcion = 7; break;
                 default: System.out.println("\nOpcion no valida\n");
             }
 
-            if(opcion < 7) controlador.crudActionPerformed(null); 
+            if(opcion < 6) controlador.crudActionPerformed(null); 
         } while(opcion != 7);
     }
 }

@@ -16,7 +16,7 @@ public interface VistaGeneral {
     public Partidos getPartido(Operacion operacion);
     public String getPromesas(Operacion operacion);
     public void buscarCandidato(Candidato candidato, Operacion operacion);
-    public String getVotos();
+    public String getVotos(String nombre);
     public void setDatos(Candidato candidato, String topCiudades, String topPartido);
     public void setResultado(String resultado, Operacion operacion, CrudException crudException);
     public void iniciar(Controlador controlador);
