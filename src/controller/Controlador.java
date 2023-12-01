@@ -99,9 +99,8 @@ public class Controlador {
                 break;
             }
             case Votar: {
-                registroVotos.addVotos(vistaGeneral.getVotos());
+                registroVotos.addVotos(vistaGeneral.getVotos(registroVotos.getVotante()));
                 break;
-
             }
             case Resultados: {
                 vistaGeneral.setDatos(registroVotos.encontrarGanador(), registroVotos.encontrarTopCiudades(), registroVotos.encontrarPartido());

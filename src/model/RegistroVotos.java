@@ -7,10 +7,11 @@ public class RegistroVotos {
     private CrudException crudException;
     private Candidato candidato;
     private String resultado;
-    public int index = 0;
+    public int index;
 
     public RegistroVotos() {
         this.candidatos = new ArrayList<Candidato>();
+        this.index = 0;
     }
 
     public CrudException getCrudException() {
@@ -129,7 +130,7 @@ public class RegistroVotos {
         try {
             return candidatos.get(index).getNombre();
         } catch (IndexOutOfBoundsException e) {
-            resultado = "Debes ingresar almenos un candidato para votar";
+            resultado = "Debes ingresar al menos un candidato para votar";
             crudException = new CrudException(resultado);
             return "";
         }
@@ -138,13 +139,13 @@ public class RegistroVotos {
     public void addVotos(String votos) {
         try {
             if (candidatos.isEmpty()) {
-                resultado = "Inscriba almenos un candidato para votar";
+                resultado = "Inscriba al menos un candidato para votar";
                 crudException = new CrudException(resultado);
                 return;
             }
 
             int voto = Integer.parseInt(votos);
-            candidatos.get(index).setVotos(voto);
+            if(index != candidatos.size()) candidatos.get(index).setVotos(voto); 
             index++;
             
             if (index < candidatos.size()) {

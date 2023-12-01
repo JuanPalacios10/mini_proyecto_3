@@ -431,7 +431,7 @@ public class VistaGui extends JFrame implements VistaGeneral {
     }
 
     @Override
-    public String getVotos() {
+    public String getVotos(String nombre) {
         return panelMenuConteo.numVotos.getText();
     }
 
